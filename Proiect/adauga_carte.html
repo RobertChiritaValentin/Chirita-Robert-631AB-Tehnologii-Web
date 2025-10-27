@@ -217,21 +217,97 @@
 
 <script>
   const fields = ['titlu','autor','editura','pagini','an_publicatie'];
-  fields.forEach(id=>{
+  fields.forEach(id => {
     const el = document.getElementById(id);
-    if(!el) return;
-    el.addEventListener('input', ()=>{
-      const pv = document.getElementById('pv-' + id.replace('an_publicatie','an'));
-      if(pv) pv.textContent = el.value || '—';
+    if (!el) return;
+    el.addEventListener('input', () => {
+      const pv = document.getElementById('pv-' + id.replace('an_publicatie', 'an'));
+      if (pv) pv.textContent = el.value || '—';
     });
   });
 
-  window.addEventListener('DOMContentLoaded', ()=>{
-    fields.forEach(id=>{
+  const form = document.getElementById("addBookForm");
+
+  const alertBox = document.createElement("div");
+  alertBox.style.position = "fixed";
+  alertBox.style.top = "20px";
+  alertBox.style.left = "50%";
+  alertBox.style.transform = "translateX(-50%)";
+  alertBox.style.padding = "12px 20px";
+  alertBox.style.borderRadius = "10px";
+  alertBox.style.fontWeight = "600";
+  alertBox.style.color = "white";
+  alertBox.style.boxShadow = "0 4px 20px rgba(0,0,0,0.15)";
+  alertBox.style.display = "none";
+  alertBox.style.zIndex = "9999";
+  document.body.appendChild(alertBox);
+
+  function showAlert(msg, type) {
+    alertBox.textContent = msg;
+    alertBox.style.background = type === "error" ? "#ef4444" : "#22c55e";
+    alertBox.style.display = "block";
+    alertBox.style.opacity = "1";
+    setTimeout(() => {
+      alertBox.style.transition = "opacity 0.5s";
+      alertBox.style.opacity = "0";
+      setTimeout(() => alertBox.style.display = "none", 600);
+    }, 2500);
+  }
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault(); 
+
+    let valid = true;
+    const currentYear = new Date().getFullYear();
+
+    fields.forEach(id => {
+      document.getElementById(id).style.borderColor = "#e6e9ef";
+    });
+
+    fields.forEach(id => {
       const el = document.getElementById(id);
-      if(el && el.value) {
-        const pv = document.getElementById('pv-' + id.replace('an_publicatie','an'));
-        if(pv) pv.textContent = el.value;
+      const val = el.value.trim();
+
+      if (!val) {
+        valid = false;
+        el.style.borderColor = "#ef4444";
+      }
+      if (id === "an_publicatie" && (val < 1500 || val > currentYear)) {
+        valid = false;
+        el.style.borderColor = "#ef4444";
+        showAlert("⚠️ Anul publicării trebuie să fie între 1500 și " + currentYear, "error");
+      }
+      if (id === "pagini" && (val <= 0)) {
+        valid = false;
+        el.style.borderColor = "#ef4444";
+        showAlert("⚠️ Numărul de pagini trebuie să fie pozitiv!", "error");
+      }
+    });
+
+    if (!valid) {
+      showAlert("❌ Completează corect toate câmpurile!", "error");
+      return;
+    }
+
+    const submitBtn = form.querySelector("button.primary");
+    submitBtn.disabled = true;
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = "⏳ Se adaugă...";
+
+    setTimeout(() => {
+      showAlert("✅ Cartea a fost adăugată!", "success");
+      form.submit();
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
+    }, 1000);
+  });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    fields.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.value) {
+        const pv = document.getElementById('pv-' + id.replace('an_publicatie', 'an'));
+        if (pv) pv.textContent = el.value;
       }
     });
   });

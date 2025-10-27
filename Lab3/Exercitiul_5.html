@@ -1,0 +1,25 @@
+
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Ex5</title></head>
+<body>
+<script>
+let a = 9, b = 4, c = 9;
+
+// verificare triunghi
+if(a + b > c && a + c > b && b + c > a){
+
+    if(a === b && b === c){
+        console.log("Triunghi echilateral");
+    } else if(a === b || a === c || b === c){
+        console.log("Triunghi isoscel");
+    } else {
+        console.log("Triunghi scalene (oarecare)");
+    }
+
+}else{
+    console.log("Nu se poate forma triunghi.");
+}
+</script>
+</body>
+</html>

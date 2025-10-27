@@ -30,7 +30,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $id_autor = $conn->insert_id;
     }
 
-    // Verificăm dacă editura există
     $sql_editura = "SELECT id FROM Editura WHERE nume = ?";
     $stmt = $conn->prepare($sql_editura);
     $stmt->bind_param("s", $editura);
