@@ -217,6 +217,7 @@
 
 <script>
   const fields = ['titlu','autor','editura','pagini','an_publicatie'];
+<<<<<<< HEAD
   fields.forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
@@ -308,6 +309,23 @@
       if (el && el.value) {
         const pv = document.getElementById('pv-' + id.replace('an_publicatie', 'an'));
         if (pv) pv.textContent = el.value;
+=======
+  fields.forEach(id=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.addEventListener('input', ()=>{
+      const pv = document.getElementById('pv-' + id.replace('an_publicatie','an'));
+      if(pv) pv.textContent = el.value || '—';
+    });
+  });
+
+  window.addEventListener('DOMContentLoaded', ()=>{
+    fields.forEach(id=>{
+      const el = document.getElementById(id);
+      if(el && el.value) {
+        const pv = document.getElementById('pv-' + id.replace('an_publicatie','an'));
+        if(pv) pv.textContent = el.value;
+>>>>>>> 0faab5e6439b4700f2992031a0bf05ef8d1c66f2
       }
     });
   });
